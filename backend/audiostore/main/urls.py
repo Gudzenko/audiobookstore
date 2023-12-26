@@ -18,9 +18,10 @@ Including another URLconf
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from . import views
+from . import viewsets
 
 router = DefaultRouter()
-router.register('audios', views.AudiosViewSet)
+router.register('audios', viewsets.AudiosViewSet)
 
 urlpatterns = [
     path('test', views.index, name="main"),
