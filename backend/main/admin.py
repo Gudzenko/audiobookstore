@@ -22,6 +22,11 @@ class NarratorAdmin(admin.ModelAdmin):
     list_display = ('first_name', 'last_name')
 
 
+@admin.register(models.Series)
+class SeriesAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+
+
 @admin.register(models.Book)
 class BookAdmin(admin.ModelAdmin):
     list_display = ('title', 'series', 'number', 'narrator', 'available', 'created_at')

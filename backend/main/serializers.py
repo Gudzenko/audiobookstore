@@ -26,6 +26,12 @@ class NarratorSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class SeriesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Series
+        fields = '__all__'
+
+
 class BookSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Book

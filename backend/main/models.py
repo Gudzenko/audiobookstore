@@ -4,6 +4,16 @@ from django.dispatch import receiver
 import os
 
 
+def audio_file_path(instance, filename):
+    try:
+        author_name = f"{instance.book.authors.first().last_name}_{instance.book.authors.first().first_name}" \
+            if instance.book.authors.exists() else 'unknown_author'
+        book_title = instance.book.title if instance.book else 'unknown_book'
+        return f'audio_files/{author_name}/{book_title}/{filename}'
+    except Exception:
+        return f'audio_files/{filename}'
+
+
 class Author(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
@@ -23,7 +33,7 @@ class Genre(models.Model):
 
 class Audio(models.Model):
     title = models.CharField(max_length=200)
-    file_path = models.FileField(upload_to='audio_files/')
+    file_path = models.FileField(upload_to=audio_file_path)
 
     def __str__(self):
         return self.title
@@ -37,14 +47,21 @@ class Narrator(models.Model):
         return f"{self.first_name} {self.last_name}"
 
 
+class Series(models.Model):
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+
+
 class Book(models.Model):
     title = models.CharField(max_length=200)
     authors = models.ManyToManyField(Author, blank=True)
-    series = models.CharField(max_length=200, blank=True, null=True)
+    series = models.ForeignKey(Series, on_delete=models.SET_NULL, null=True, blank=True)
     number = models.IntegerField(blank=True, null=True)
     narrator = models.ForeignKey(Narrator, on_delete=models.SET_NULL, null=True, blank=True)
     description = models.TextField(blank=True, null=True)
-    available = models.BooleanField(default=True)
+    available = models.BooleanField(default=False)
     audio_files = models.ManyToManyField(Audio, blank=True)
     genres = models.ManyToManyField(Genre, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)

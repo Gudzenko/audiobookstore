@@ -23,6 +23,11 @@ class NarratorViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.NarratorSerializer
 
 
+class SeriesViewSet(viewsets.ModelViewSet):
+    queryset = models.Series.objects.all()
+    serializer_class = serializers.SeriesSerializer
+
+
 class BookViewSet(viewsets.ModelViewSet):
     queryset = models.Book.objects.all()
     serializer_class = serializers.BookSerializer
