@@ -1,8 +1,6 @@
 from django.db import models
 from django.db.models.signals import pre_delete, pre_save
 from django.dispatch import receiver
-import os
-import logging
 
 
 def audio_file_path(instance, filename):
@@ -14,12 +12,14 @@ def audio_file_path(instance, filename):
     except Exception:
         return f'audio_files/{filename}'
 
+
 def author_photo_file_path(instance, filename):
     try:
         author_name = f"{instance.last_name}_{instance.first_name}"
         return f'author_photo/{author_name}/{filename}'
     except Exception:
         return f'author_photo/undefined_author/{filename}'
+
 
 def book_illustrations_file_path(instance, filename):
     try:
