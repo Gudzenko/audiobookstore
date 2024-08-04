@@ -1,0 +1,10 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+    <h1>Серии</h1>
+    <ul>
+    {% for series in series %}
+        <li>{{ series.name }}</li>
+    {% endfor %}
+    </ul>
+{% endblock %}

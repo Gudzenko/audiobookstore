@@ -2,6 +2,7 @@ from django.db import models
 from django.db.models.signals import pre_delete, pre_save
 from django.dispatch import receiver
 import os
+import logging
 
 
 def audio_file_path(instance, filename):
@@ -13,11 +14,25 @@ def audio_file_path(instance, filename):
     except Exception:
         return f'audio_files/{filename}'
 
+def author_photo_file_path(instance, filename):
+    try:
+        author_name = f"{instance.last_name}_{instance.first_name}"
+        return f'author_photo/{author_name}/{filename}'
+    except Exception:
+        return f'author_photo/undefined_author/{filename}'
+
+def book_illustrations_file_path(instance, filename):
+    try:
+        book_title = instance.title
+        return f'book_illustrations_files/{book_title}/{filename}'
+    except Exception:
+        return f'book_illustrations_files/undefined_book/{filename}'
+
 
 class Author(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
-    photo = models.ImageField(upload_to='authors_photos/', blank=True, null=True)
+    photo = models.ImageField(upload_to=author_photo_file_path, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
 
     def __str__(self):
@@ -65,7 +80,7 @@ class Book(models.Model):
     audio_files = models.ManyToManyField(Audio, blank=True)
     genres = models.ManyToManyField(Genre, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    illustration = models.ImageField(upload_to='book_illustrations/', blank=True, null=True)
+    illustration = models.ImageField(upload_to=book_illustrations_file_path, blank=True, null=True)
 
     def __str__(self):
         return self.title
@@ -77,16 +92,16 @@ class Book(models.Model):
 def delete_files(sender, instance, **kwargs):
     if isinstance(instance, Audio):
         if instance.file_path:
-            if os.path.isfile(instance.file_path.path):
-                os.remove(instance.file_path.path)
+            storage, path = instance.file_path.storage, instance.file_path.name
+            storage.delete(path)
     elif isinstance(instance, Book):
         if instance.illustration:
-            if os.path.isfile(instance.illustration.path):
-                os.remove(instance.illustration.path)
+            storage, path = instance.illustration.storage, instance.illustration.name
+            storage.delete(path)
     elif isinstance(instance, Author):
         if instance.photo:
-            if os.path.isfile(instance.photo.path):
-                os.remove(instance.photo.path)
+            storage, path = instance.photo.storage, instance.photo.name
+            storage.delete(path)
 
 
 @receiver(pre_save, sender=Author)
@@ -103,13 +118,13 @@ def delete_old_files_on_change(sender, instance, **kwargs):
 
     if isinstance(instance, Audio):
         if old_instance.file_path and old_instance.file_path != instance.file_path:
-            if os.path.isfile(old_instance.file_path.path):
-                os.remove(old_instance.file_path.path)
+            storage, path = old_instance.file_path.storage, old_instance.file_path.name
+            storage.delete(path)
     elif isinstance(instance, Book):
         if old_instance.illustration and old_instance.illustration != instance.illustration:
-            if os.path.isfile(old_instance.illustration.path):
-                os.remove(old_instance.illustration.path)
+            storage, path = old_instance.illustration.storage, old_instance.illustration.name
+            storage.delete(path)
     elif isinstance(instance, Author):
         if old_instance.photo and old_instance.photo != instance.photo:
-            if os.path.isfile(old_instance.photo.path):
-                os.remove(old_instance.photo.path)
+            storage, path = old_instance.photo.storage, old_instance.photo.name
+            storage.delete(path)

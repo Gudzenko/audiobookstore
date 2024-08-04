@@ -23,6 +23,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-secret_keysecret_keysecret_keysecret_keysecret_key')
 
+B2_APP_KEY_ID = os.environ.get('B2_APP_KEY_ID', 'your-app-key-id')
+B2_APP_KEY = os.environ.get('B2_APP_KEY', 'your-app-key')
+B2_BUCKET_NAME = os.environ.get('B2_BUCKET_NAME', 'your-bucket-name')
+
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -61,7 +66,7 @@ ROOT_URLCONF = 'audiostore.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -129,6 +134,10 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# DEFAULT_FILE_STORAGE = 'django_backblaze_b2.backends.BackblazeB2Storage'
+DEFAULT_FILE_STORAGE = 'main.storages_backends.B2Storage'
 # Media files settings
 MEDIA_URL = '/media/'
+# MEDIA_URL = f'https://f002.backblazeb2.com/file/{os.environ.get("B2_BUCKET_NAME", "your-bucket-name")}/'
+
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

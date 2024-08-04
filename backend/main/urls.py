@@ -13,5 +13,10 @@ router.register(r'series', viewsets.SeriesViewSet)
 
 urlpatterns = [
     path('', views.index, name='index'),
+    path('authors/', views.author_list, name='author_list'),
+    path('books/', views.book_list, name='book_list'),
+    path('genres/', views.genre_list, name='genre_list'),
+    path('narrators/', views.narrator_list, name='narrator_list'),
+    path('series/', views.series_list, name='series_list'),
     path('', include(router.urls)),
 ]

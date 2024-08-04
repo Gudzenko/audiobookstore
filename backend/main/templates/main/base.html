@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio Books</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+        }
+        .sidebar {
+            width: 200px;
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+        .content {
+            flex-grow: 1;
+            padding: 20px;
+        }
+        .card {
+            height: 100%;
+        }
+        .card-img-top {
+            height: 200px;
+            object-fit: contain;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2>Меню</h2>
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'index' %}">Главная</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'author_list' %}">Авторы</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'book_list' %}">Книги</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'genre_list' %}">Жанры</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'narrator_list' %}">Чтецы</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'series_list' %}">Циклы</a>
+            </li>
+        </ul>
+    </div>
+    <div class="content">
+        {% block content %}
+        {% endblock %}
+    </div>
+</body>
+</html>

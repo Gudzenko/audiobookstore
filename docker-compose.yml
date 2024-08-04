@@ -9,4 +9,7 @@ services:
       - ./backend:/app
     environment:
       SECRET_KEY: ${SECRET_KEY}
+      B2_APP_KEY_ID: ${B2_APP_KEY_ID}
+      B2_APP_KEY: ${B2_APP_KEY}
+      B2_BUCKET_NAME: ${B2_BUCKET_NAME}
     command: python manage.py runserver 0.0.0.0:8000

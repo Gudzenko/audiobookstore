@@ -1,0 +1,10 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+    <h1>Чтецы</h1>
+    <ul>
+    {% for narrator in narrators %}
+        <li>{{ narrator.first_name }} {{ narrator.last_name }}</li>
+    {% endfor %}
+    </ul>
+{% endblock %}
