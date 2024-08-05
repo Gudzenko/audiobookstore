@@ -1,0 +1,46 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+    <h1 class="text-center">{{ book.title }}</h1>
+    <div class="text-center mb-4">
+        {% if book.illustration %}
+            <img src="{{ book.illustration.url }}" alt="{{ book.title }}" class="img-thumbnail mb-4">
+        {% endif %}
+    </div>
+    <div class="text-left ml-4">
+        <p><strong>Автор(ы):</strong>
+        {% for author in book.authors.all %}
+            {{ author.first_name }} {{ author.last_name }}{% if not forloop.last %}, {% endif %}
+        {% endfor %}
+        </p>
+        <p><strong>Серия:</strong>
+        {% if book.series %}
+            {{ book.series.name }}
+        {% else %}
+            Нет
+        {% endif %}
+        </p>
+        <p><strong>Номер:</strong> {{ book.number }}</p>
+        <p><strong>Чтец:</strong>
+        {% if book.narrator %}
+            {{ book.narrator.first_name }} {{ book.narrator.last_name }}
+        {% else %}
+            Нет
+        {% endif %}
+        </p>
+        <p><strong>Описание:</strong> {{ book.description }}</p>
+        <p><strong>Жанры:</strong>
+        {% for genre in book.genres.all %}
+            {{ genre.name }}{% if not forloop.last %}, {% endif %}
+        {% endfor %}
+        </p>
+        <p><strong>Дата создания:</strong> {{ book.created_at }}</p>
+        <p><strong>Наличие:</strong> {{ book.available|yesno:"Есть,Нет" }}</p>
+        <h3>Аудиофайлы</h3>
+        <ul>
+        {% for audio in book.audio_files.all %}
+            <li>{{ audio.title }}</li>
+        {% endfor %}
+        </ul>
+    </div>
+{% endblock %}

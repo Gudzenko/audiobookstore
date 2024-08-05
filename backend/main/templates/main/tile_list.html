@@ -11,8 +11,10 @@
                 {% else %}
                     <img src="https://via.placeholder.com/150" class="card-img-top" alt="No image available">
                 {% endif %}
-                <div class="card-body">
-                    <h5 class="card-title">{{ item.title }}</h5>
+                <div class="card-body text-center">
+                    <h5 class="card-title">
+                        <a href="{{ item.url }}">{{ item.title }}</a>
+                    </h5>
                 </div>
             </div>
         </div>
